@@ -1,26 +1,52 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <link rel="icon" href="/src/assets/logo.png">
+  <div id="app">
+    <NavBar />
+    <router-view />
+
+  </div>
+  <div>
+    <Footer_custom></Footer_custom>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import NavBar from "./components/NavBar.vue";
+import Footer_custom from "./components/Footer_custom.vue";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NavBar,
+    Footer_custom,
+  },
+  mounted() {
+    document.title = "Turtle-K";
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+#page-wrap {
+  margin: auto;
+  max-width: 900px;
+  min-height: 100vh;
+}
+
+
+button {
+  background-color: orangered;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  outline: 0;
+  padding: 16px;
 }
 </style>
