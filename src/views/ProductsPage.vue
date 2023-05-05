@@ -7,6 +7,15 @@
         </div>
     </div>
     <div class="text">Sản phẩm gợi ý</div>
+    <div class="category">
+    <span @click="setAll">Tất cả</span>
+    <span @click="setGift">Set quà</span>
+    <span @click="setBag">Túi</span>
+    <span @click="setTeddy">Gấu bông</span>
+    <span @click="setHeadphone">Tai nghe</span>
+    </div>
+    
+
     <div id="page-wrap">
         <ProductsGrid :products="products" />
     </div>
@@ -24,7 +33,7 @@ export default {
     },
     name: "ProductsPage",
     el: '#app',
-    
+
     data() {
         return {
             products: [],
@@ -33,14 +42,49 @@ export default {
                 { src: '../images/slider1.png' },
                 { src: '../images/slider2.png' },
             ],
-            currentIndex: 0
+            currentIndex: 0,
+            value: '',
         };
     },
-
-    async created() {
-        const result = await axios.get('/api/products')
+    methods: {
+        setAll() {
+            this.value = '';
+            this.setproduct();
+        },
+        setGift() {
+            this.value = 'set';
+            this.setproduct();
+        },
+        setBag() {
+            this.value = 'bag';
+            this.setproduct();
+        },
+        setTeddy() {
+            this.value = 'teddy';
+            this.setproduct();
+        },
+        setHeadphone() {
+            this.value = 'headphone';
+            this.setproduct();
+        },
+        async setproduct(){
+        const result = await axios.get(`/api/products`)
         const products = result.data;
-        this.products = products;
+        if (this.value == '') {
+            this.products = products
+        } else {
+            this.products = products.filter(product => product.type == this.value);
+        }
+        }
+    },
+    async created() {
+        const result = await axios.get(`/api/products`)
+        const products = result.data;
+        if (this.value == '') {
+            this.products = products
+        } else {
+            this.products = products.filter(product => product.type == this.value);
+        }
         setInterval(() => {
             this.currentIndex++;
             if (this.currentIndex >= this.images.length) {
@@ -84,5 +128,23 @@ img {
     font-weight: bold;
     font-size: larger;
     padding: 8px;
+    margin-bottom: 20px;
+}
+.category{
+    margin: auto;
+    max-width: 900px;
+}
+span{
+    background-color: antiquewhite;
+    margin: 0 10px;
+    border-radius: 100%;
+    padding: 10px;
+    color: purple;
+    
+}
+span:hover{
+    color: orangered;
+    cursor: pointer;
+    padding: 12px 10px;
 }
 </style>

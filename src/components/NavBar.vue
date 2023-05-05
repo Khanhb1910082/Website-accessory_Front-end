@@ -43,8 +43,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link">Tất cả </a>
-                    <!-- <a :selected-value="bag" @value-selected="handleValueSelected">Tất cả </a> -->
+                    <router-link to="/products" class="nav-link">Tất cả </router-link>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Set quà </a>
@@ -67,7 +66,6 @@
 </template>
 <script>
 import axios from 'axios';
-
 export default {
     name: 'NavBar',
     data() {
@@ -75,11 +73,6 @@ export default {
             cartItems: [],
             itemCount: 0,
         }
-    },
-    methods: {
-        handleValueSelected(value) {
-            this.selectedValue = value;
-        },
     },
 
     mounted() {

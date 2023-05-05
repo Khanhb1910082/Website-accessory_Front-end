@@ -1,5 +1,5 @@
 <template>
-    <div v-if="product.type!=''" class="product-item">
+    <div v-if="product.type!=selectedValue" class="product-item">
         <router-link v-bind:to='"/products/" + product.id' >
             <div class="container-build"><img v-bind:src="product.imageUrl"></div>
         </router-link>
@@ -13,13 +13,10 @@
 </template>
 
 <script>
+
 export default {
     name: 'ProductsGridItem',
-    props: 
-        ['product'],
-       
-        
-   
+    props:['product']
 }
 </script>
 
