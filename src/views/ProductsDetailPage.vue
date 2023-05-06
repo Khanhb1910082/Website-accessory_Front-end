@@ -8,7 +8,18 @@
         <div id="product-details">
           <h1>{{ product.name }}</h1>
           <div>
-            <h3 id="price">{{ product.price }}đ</h3>
+            <h3 id="price">{{ total }}.000đ</h3>
+          </div>
+          <div class="form-inline color">Mix:
+            <button class="color1"></button>
+            <button class="color2"></button>
+            <button class="color3"></button>
+
+          </div>
+          <div class="form-inline border-side">
+            <button class="button-mins" @click="decreaseQuantity">-</button>
+            <span class="quantity">{{ quantity }}</span>
+            <button class="button-add" @click="increaseQuantity">+</button>
           </div>
           <p>Đánh giá: {{ product.averageRating }}</p>
           <button id="add-to-cart" v-if="!itemIsInCart && !showSucessMessage" v-on:click="addToCart">Thêm vào giỏ</button>
@@ -45,13 +56,17 @@ export default {
       product: {},
       cartItems: [],
       products: [],
+      quantity: 1,
       showSucessMessage: false,
     };
   },
   computed: {
     itemIsInCart() {
       return this.cartItems.some(item => item.id === this.product.id);
-    }
+    },
+    total() {
+      return this.quantity * this.product.price
+    },
   },
   methods: {
     async addToCart() {
@@ -60,9 +75,17 @@ export default {
       });
       this.showSucessMessage = true;
     },
-    loadProduct(){
+    loadProduct() {
       window.location.reload()
-    }, 
+    },
+    increaseQuantity() {
+      this.quantity++
+    },
+    decreaseQuantity() {
+      if (this.quantity > 1) {
+        this.quantity--
+      }
+    },
   },
   async created() {
     const { data: product } = await axios.get(`/api/products/${this.$route.params.id}`);
@@ -110,6 +133,7 @@ img {
   top: 24px;
   right: 16px;
   color: deeppink;
+  margin: 20px 0;
 }
 
 .green-button {
@@ -133,5 +157,61 @@ img {
   font-size: larger;
   padding: 8px;
   margin-top: 20px;
+}
+
+.border-side{
+  border: 1px solid black;
+  width: 35%;
+  display: flex;
+  justify-content: space-between;
+  margin: 35px 0;
+}
+.button-mins{
+  background-color: white;
+  border-right: 1px solid black;
+  color: black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.button-add{
+  background-color: white;
+  border-left: 1px solid black;
+  color: black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.quantity{
+  margin: 0 10px;
+}
+
+.color{
+  margin: 30px 0;
+}
+.color1{
+  border-radius: 50%;
+  background-color: maroon;
+  margin-left: 10px;
+}
+.color2{
+  border-radius: 50%;
+  background-color: blueviolet;
+  margin-left: 10px;
+}
+.color3{
+  border-radius: 50%;
+  background-color: darkblue;
+  margin-left: 10px;
 }
 </style>
