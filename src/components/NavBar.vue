@@ -57,9 +57,18 @@
 
 
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Set quà tặng siêu hot" aria-label="Search">
+            <form class="formInline form-inline my-2 my-lg-0">
+                <input @keyup="searchSuggest" v-model="keyWord" class="form-control mr-sm-2" type="search"
+                    placeholder="Set quà tặng siêu hot" aria-label="Search">
                 <button class="btn btn-danger my-2 my-sm-0" type="submit">Tìm kiếm</button>
+                <ul v-if="keyWord != ''" class="live-search-vue-js">
+                    <li v-for="(item, index) in products" :key="index" @click="loadProduct">
+                        <label  :for="index"><router-link v-bind:to='"/products/" + item.id'>{{ item.name
+                        }}</router-link></label>
+                    </li>
+                </ul>
+
+
             </form>
         </div>
     </nav>
@@ -72,16 +81,37 @@ export default {
         return {
             cartItems: [],
             itemCount: 0,
+            keyWord: '',
+            products: [],
+            productsTemp: [],
         }
     },
+    methods: {
+        searchSuggest() {
+            if (this.keyWord.length > 0) {
+                this.products = this.productsTemp.filter((item) => {
+                    return this.keyWord.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+                })
+            } else {
+                this.products = this.productsTemp
+            }
+        },
+        loadProduct() {
+            window.location.reload()
+        },
+    },
 
-    mounted() {
+    async mounted() {
         axios.get('/api/users/123/cart').then(response => {
             this.itemCount = response.data.length;
         })
             .catch(error => {
                 console.log(error);
             });
+        const result = await axios.get(`/api/products`)
+        const products = result.data;
+        this.products = products;
+        this.productsTemp = products;
     }
 }
 </script>
@@ -119,7 +149,7 @@ li:hover {
     color: firebrick;
 }
 
-ul li {
+div ul li {
     margin-right: 10px;
     color: purple;
     list-style: none;
@@ -132,6 +162,7 @@ a {
 
 a:hover {
     color: firebrick;
+    text-decoration: none;
 }
 
 .right {
@@ -180,4 +211,26 @@ button {
     bottom: -5px;
     left: -5px;
 }
-</style>
+
+.formInline {
+    display: inline-block;
+}
+
+ul.live-search-vue-js {
+    max-height: 300px;
+    overflow: hidden;
+    position: absolute;
+    background-color: aliceblue;
+    -webkit-box-shadow: 0 1px 3px 0 rgb(44 44 44 / 50%);
+    -moz-box-shadow: 0 1px 3px 0 rgba(44, 44, 44, .5);
+    box-shadow: 0 1px 3px 0 rgb(44 44 44 / 50%);
+    top: 50px;
+    width: 21.5%;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 10000;
+}
+
+ul.live-search-vue-js li {
+    margin-bottom: 10px;
+}</style>
